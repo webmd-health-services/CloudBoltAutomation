@@ -56,3 +56,22 @@ Describe 'Get-CBGroup.when paging results' {
         ($groups | Measure-Object).Count | Should -BeGreaterOrEqual 21
     }
 }
+
+Describe 'Get-CBGroup.when passing group object via pipline' {
+    GivenGroups 1
+    $group = Get-CBGroup -Session $session -ID 1 | Get-CBGroup -Session $session
+    It ('should return group') {
+        $group | Should -Not -BeNullOrEmpty
+        $group.id | Should -Be 1
+    }
+}
+
+
+Describe 'Get-CBGroup.when passing group ID object via pipline' {
+    GivenGroups 1
+    $group = 1 | Get-CBGroup -Session $session
+    It ('should return group') {
+        $group | Should -Not -BeNullOrEmpty
+        $group.id | Should -Be 1
+    }
+}

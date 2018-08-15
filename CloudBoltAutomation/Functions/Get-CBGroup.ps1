@@ -32,7 +32,7 @@ function Get-CBGroup
         # The session/connecton to use. Use `New-CBSession` to create a session object.
         $Session,
 
-        [Parameter(Mandatory,ParameterSetName='SpecificGroup')]
+        [Parameter(Mandatory,ParameterSetName='SpecificGroup',ValueFromPipeline,ValueFromPipelineByPropertyName)]
         [int]
         $ID,
 
