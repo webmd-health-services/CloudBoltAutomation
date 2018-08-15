@@ -1,3 +1,4 @@
 
-Get-ChildItem -Path (Join-Path -Path $PSScriptRoot -ChildPath 'Functions\*.ps1') |
-    ForEach-Object { . $_.FullName }
+& {
+    Get-ChildItem -Path (Join-Path -Path $PSScriptRoot -ChildPath 'Functions\*.ps1')
+} | ForEach-Object { . $_.FullName }
