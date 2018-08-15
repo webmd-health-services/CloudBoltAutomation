@@ -51,6 +51,10 @@ function Invoke-CBRestMethod
         # The path to the resource to use. If the endpoint URI `http://example.com/rest/build-status/1.0/commits`, the ResourcePath is everything after the API version. In this case, the resource path is `commits`.
         $ResourcePath,
 
+        [Parameter(ParameterSetName='NonPaged')]
+        [string]
+        $Body,
+
         [Parameter(Mandatory,ParameterSetName='Paged')]
         [Switch]
         $IsPaged,
@@ -64,7 +68,6 @@ function Invoke-CBRestMethod
     Use-CallerPreference -Cmdlet $PSCmdlet -Session $ExecutionContext.SessionState
 
     $queryString = & {
-
                         if( $IsPaged -and $PageSize )
                         {
                             'page_size={0}' -f $PageSize
@@ -93,7 +96,13 @@ function Invoke-CBRestMethod
             return $result | Select-Object -ExpandProperty '_embedded'
         }
 
-        Invoke-RestMethod -Method $Method -Uri $uri -Headers $headers -ContentType $contentType
+        $bodyParam = @{ }
+        if( $Body )
+        {
+            $bodyParam['Body'] = $Body
+        }
+
+        Invoke-RestMethod -Method $Method -Uri $uri -Headers $headers -ContentType $contentType @bodyParam
 
     }
     catch [Net.WebException]

@@ -45,12 +45,14 @@ function Get-CBGroup
     Set-StrictMode -Version 'Latest'
     Use-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
 
-    if( $PSCmdlet.ParameterSetName -eq 'AllGroups' )
-    {
-        Invoke-CBRestMethod -Session $Session -Method Get -ResourcePath 'groups/' -IsPaged -PageSize $PageSize
-    }
-    else
-    {
-        Invoke-CBRestMethod -Session $Session -Method Get -ResourcePath ('groups/{0}/' -f $ID)
-    }
+    & {
+        if( $PSCmdlet.ParameterSetName -eq 'AllGroups' )
+        {
+            Invoke-CBRestMethod -Session $Session -Method Get -ResourcePath 'groups/' -IsPaged -PageSize $PageSize
+        }
+        else
+        {
+            Invoke-CBRestMethod -Session $Session -Method Get -ResourcePath ('groups/{0}/' -f $ID)
+        }
+    } | Add-CBTypeName -Group -PassThru
 }
