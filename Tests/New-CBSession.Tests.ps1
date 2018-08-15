@@ -5,7 +5,7 @@ Set-StrictMode -Version 'Latest'
 & (Join-Path -Path $PSScriptRoot -ChildPath 'Initialize-Test.ps1' -Resolve)
 
 Describe 'New-CBSession' {
-    $session = New-CBSession -Uri $CBBaseUri -Credential $CBCredential
+    $session = New-CBTestSession
     It ('should return a session object') {
         $session | Should -BeOfType ([PSCustomObject])
         $session | Get-Member -Name 'Token' | Should -Not -BeNullOrEmpty
@@ -13,13 +13,13 @@ Describe 'New-CBSession' {
     }
 
     It ('should set CloudBolt URI in session') {
-        $session.Uri | Should -Be $CBBaseUri
+        ([uri]$session.Uri).PathAndQuery | Should -Be ('/api/v2/')
     }
 }
 
 Describe 'New-CBSession.when authenticating against a domain' {
     Mock -CommandName 'Invoke-RestMethod' -ModuleName 'CloudBoltAutomation' -MockWith { [pscustomobject]@{ token = 'fizzbuzz' } }
-    New-CBSession -Uri $CBBaseUri -Credential $CBCredential -Domain 'fubarsnafu'
+    New-CBTestSession -Domain 'fubarsnafu'
     It ('should pass domain to token API') {
         Assert-MockCalled -CommandName 'Invoke-RestMethod' -ModuleName 'CloudBoltAutomation' -Times 1 -ParameterFilter { ($Body | ConvertFrom-Json).domain -eq 'fubarsnafu' }
     }

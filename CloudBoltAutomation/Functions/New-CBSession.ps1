@@ -37,12 +37,18 @@ function New-CBSession
 
         [string]
         # The domain to use.
-        $Domain
+        $Domain,
+
+        [int]
+        # The page size to use. The default is an obscenely large number.
+        $PageSize = [int]::MaxValue
     )
 
     Set-StrictMode -Version 'Latest'
 
-    $tokenUri = New-Object -TypeName 'Uri' -ArgumentList @($Uri,'/api/v2/api-token-auth/')
+    $apiUri = New-Object -TypeName 'Uri' -ArgumentList @($Uri,'/api/v2/')
+
+    $tokenUri = New-Object -TypeName 'Uri' -ArgumentList @($apiUri,'api-token-auth/')
     $body = @{
                                 username = $Credential.UserName;
                                 password = $Credential.GetNetworkCredential().Password
@@ -54,5 +60,5 @@ function New-CBSession
 
     $body = ConvertTo-Json -InputObject $body
     $result = Invoke-RestMethod -Method Post -Uri $tokenUri -UseBasicParsing -Body $body -ContentType 'application/json'
-    return [pscustomobject]@{ Token = $result.token; Uri = $Uri }
+    return [pscustomobject]@{ Token = $result.token; Uri = $apiUri }
 }
