@@ -6,16 +6,25 @@ Set-StrictMode -Version 'Latest'
 
 $session = New-CBTestSession
 
-Describe 'Get-CBGroup.when getting all groups' {
-    $group = Get-CBGroup -Session $session
-    if( ($group | Measure-Object).Count -le 1 )
+function GivenGroups
+{
+    param(
+        $Count
+    )
+
+    for( $num = 1; $num -lt $Count ; $num++ )
     {
-        for( $num = 1; $num++; $num -le 2 )
+        if( -not (Get-CBGroup -Session $session -ID $num) )
         {
-            New-CBGroup -Session $session -Name ('CBAutomation.Get-CBGroup.{0}' -f $num) -Type 'Organization'
+            $name = 'CBAutomation.Get-CBGroup.{0}' -f $num
+            New-CBGroup -Session $session -Name $name -Type 'Organization'
         }
-        $group = Get-CBGroup -Session $session
     }
+}
+
+Describe 'Get-CBGroup.when getting all groups' {
+    GivenGroups 2
+    $group = Get-CBGroup -Session $session
 
     It ('should return all groups') {
         $group | Should -Not -BeNullOrEmpty
@@ -36,4 +45,14 @@ Describe 'Get-CBGroup.when getting a specific group' {
         $group | Should -HaveCount 1
     }
     ThenHasType -ForGroup $group
+}
+
+Describe 'Get-CBGroup.when paging results' {
+    # Default page size is 10.
+    GivenGroups 21
+
+    $groups = Get-CBGroup -Session $session
+    It ('should return all the groups') {
+        ($groups | Measure-Object).Count | Should -BeGreaterOrEqual 21
+    }
 }

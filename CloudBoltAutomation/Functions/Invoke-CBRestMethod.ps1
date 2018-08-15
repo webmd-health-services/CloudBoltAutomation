@@ -77,10 +77,9 @@ function Invoke-CBRestMethod
     if( $queryString )
     {
         $queryString = $queryString -join '&'
-        $queryString = '?{0}' -f $queryString
     }
 
-    $uri = New-Object 'Uri' -ArgumentList $Session.Uri,('{0}{1}' -f $ResourcePath,$queryString)
+    $uri = New-Object 'Uri' -ArgumentList $Session.Uri,('{0}?{1}' -f $ResourcePath,$queryString)
     $contentType = 'application/json'
 
     #$DebugPreference = 'Continue'
@@ -89,11 +88,25 @@ function Invoke-CBRestMethod
 
     try
     {
-
         if( $PSCmdlet.ParameterSetName -eq 'Paged' )
         {
-            $result = Invoke-RestMethod -Method $Method -Uri $uri -Headers $headers -ContentType $contentType
-            return $result | Select-Object -ExpandProperty '_embedded'
+            while( $true )
+            {
+                $result = Invoke-RestMethod -Method $Method -Uri $uri -Headers $headers -ContentType $contentType
+                $result | Select-Object -ExpandProperty '_embedded'
+                if( -not ($result._links | Get-Member -Name 'next') )
+                {
+                    break
+                }
+                # The URI returned needs to end with a '/' otherwise it fails.
+                $nextPage = $result._links.next.href -replace '\?','/?'
+                if( $PageSize )
+                {
+                    $nextPage = '{0}&page_size={1}' -f $nextPage,$PageSize
+                }
+                $uri = New-Object -TypeName 'Uri' -ArgumentList @($uri,$nextPage)
+            }
+            return
         }
 
         $bodyParam = @{ }
