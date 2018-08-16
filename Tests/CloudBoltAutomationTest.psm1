@@ -1,4 +1,22 @@
 
+function GivenCBGroup
+{
+    param(
+        [int]
+        $Count = 1,
+
+        [Switch]
+        $Exists
+    )
+
+    $session = New-CBTestSession
+
+    for( $num = 1; $num -le $Count; ++$num )
+    {
+        New-CBGroup -Session $session -Name ('CBAutomation.Group.{0}' -f [Guid]::NewGuid()) -Type 'Organization'
+    }
+}
+
 function New-CBTestSession
 {
     param(
@@ -17,7 +35,7 @@ function New-CBTestSession
     return New-CBSession -Uri $baseUri -Credential $credential @domainParam
 }
 
-function ThenHasType
+function ThenCBObjectHasType
 {
     param(
         [Parameter(Mandatory,Position=0)]

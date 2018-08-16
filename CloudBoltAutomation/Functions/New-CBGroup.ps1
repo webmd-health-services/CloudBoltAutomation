@@ -38,6 +38,7 @@ function New-CBGroup
                                     name = $Name;
                                     type = $Type
                                 }
+    Write-Verbose -Message ('Creating group "{0}".' -f $Name)
     Invoke-CBRestMethod -Session $Session -Method Post -ResourcePath 'groups/' -Body ($group | ConvertTo-Json) |
         Add-CBTypeName -Group -PassThru
 }

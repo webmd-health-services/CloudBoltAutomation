@@ -35,7 +35,7 @@ function Invoke-CBRestMethod
                  }
         
     #>
-    [CmdletBinding(DefaultParameterSetName='NonPaged')]
+    [CmdletBinding(DefaultParameterSetName='NonPaged',SupportsShouldProcess)]
     param(
         [Parameter(Mandatory)]
         [object]
@@ -88,38 +88,41 @@ function Invoke-CBRestMethod
 
     try
     {
-        if( $PSCmdlet.ParameterSetName -eq 'Paged' )
+        if( $PSCmdlet.ShouldProcess($uri,$Method) )
         {
-            while( $true )
+            if( $PSCmdlet.ParameterSetName -eq 'Paged' )
             {
-                $result = Invoke-RestMethod -Method $Method -Uri $uri -Headers $headers -ContentType $contentType
-                $result | Select-Object -ExpandProperty '_embedded'
-                if( -not ($result._links | Get-Member -Name 'next') )
+                while( $true )
                 {
-                    break
+                    $result = Invoke-RestMethod -Method $Method -Uri $uri -Headers $headers -ContentType $contentType
+                    $result | Select-Object -ExpandProperty '_embedded'
+                    if( -not ($result._links | Get-Member -Name 'next') )
+                    {
+                        break
+                    }
+                    # The URI returned needs to end with a '/' otherwise it fails.
+                    $nextPage = $result._links.next.href -replace '\?','/?'
+                    if( $PageSize )
+                    {
+                        $nextPage = '{0}&page_size={1}' -f $nextPage,$PageSize
+                    }
+                    $uri = New-Object -TypeName 'Uri' -ArgumentList @($uri,$nextPage)
                 }
-                # The URI returned needs to end with a '/' otherwise it fails.
-                $nextPage = $result._links.next.href -replace '\?','/?'
-                if( $PageSize )
-                {
-                    $nextPage = '{0}&page_size={1}' -f $nextPage,$PageSize
-                }
-                $uri = New-Object -TypeName 'Uri' -ArgumentList @($uri,$nextPage)
+                return
             }
-            return
+
+            $bodyParam = @{ }
+            if( $Body )
+            {
+                $bodyParam['Body'] = $Body
+            }
+
+            Invoke-RestMethod -Method $Method -Uri $uri -Headers $headers -ContentType $contentType @bodyParam |
+                Where-Object { $_ }
         }
-
-        $bodyParam = @{ }
-        if( $Body )
-        {
-            $bodyParam['Body'] = $Body
-        }
-
-        Invoke-RestMethod -Method $Method -Uri $uri -Headers $headers -ContentType $contentType @bodyParam
-
     }
     catch [Net.WebException]
     {
-        Write-Error -ErrorRecord $_
+        Write-Error -ErrorRecord $_ -ErrorAction $ErrorActionPreference
     }
 }
