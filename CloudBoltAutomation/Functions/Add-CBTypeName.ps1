@@ -11,6 +11,10 @@ function Add-CBTypeName
         [Switch]
         $Group,
 
+        [Parameter(ParameterSetName='CloudBolt.Management.Automation.Environment')]
+        [Switch]
+        $Environment,
+
         [Switch]
         $PassThru
     )

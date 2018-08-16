@@ -88,6 +88,12 @@ function Invoke-CBRestMethod
 
     try
     {
+
+        if( $Body )
+        {
+            $Body | Write-Debug
+        }
+
         if( $PSCmdlet.ShouldProcess($uri,$Method) )
         {
             if( $PSCmdlet.ParameterSetName -eq 'Paged' )

@@ -38,16 +38,23 @@ function New-CBTestSession
 function ThenCBObjectHasType
 {
     param(
-        [Parameter(Mandatory,Position=0)]
+        [Parameter(Mandatory,Position=0,ValueFromPipeline)]
         [object]
         $InputObject,
 
         [Parameter(Mandatory,ParameterSetName='CloudBolt.Management.Automation.Group')]
         [Switch]
-        $ForGroup
+        $ForGroup,
+
+        [Parameter(Mandatory,ParameterSetName='CloudBolt.Management.Automation.Environment')]
+        [Switch]
+        $ForEnvironment
     )
 
-    It ('should have the right type') {
-        $InputObject.psobject.TypeNames.Contains($PSCmdlet.ParameterSetName) | Should -BeTrue
+    process
+    {
+        It ('should have the right type') {
+            $InputObject.psobject.TypeNames.Contains($PSCmdlet.ParameterSetName) | Should -BeTrue
+        }
     }
 }
