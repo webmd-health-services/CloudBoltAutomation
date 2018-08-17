@@ -12,7 +12,7 @@
     RootModule = 'CloudBoltAutomation.psm1'
 
     # Version number of this module.
-    ModuleVersion = '0.0'
+    ModuleVersion = '0.0.0'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -124,6 +124,16 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = @'
+* Created `Get-CBEnvironment` function for getting environments from CloudBolt.
+* Created `Get-CBGroup` function for getting groups from CloudBolt.
+* Created `Get-CBJob` function for getting jobs from CloudBolt.
+* Created `Get-CBOrder` function for getting orders from CloudBolt.
+* Created `Invoke-CBRestMethod` function for calling CloudBolt API endpoints.
+* Created `New-CBGroup` function for creating groups in CloudBolt.
+* Created `New-CBSession` function for connecting to CloudBolt.
+* Created `Remove-CBGroup` function for removing groups from CloudBolt.
+* Created `Start-CBOrder` function for starting an order in CloudBolt.
+* Created `Wait-CBOrder` function for waiting for a CloudBolt order to complete.
 '@
 
         } # End of PSData hashtable
