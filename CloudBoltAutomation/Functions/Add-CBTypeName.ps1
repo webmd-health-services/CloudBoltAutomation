@@ -15,6 +15,14 @@ function Add-CBTypeName
         [Switch]
         $Environment,
 
+        [Parameter(ParameterSetName='CloudBolt.Management.Automation.Order')]
+        [Switch]
+        $Order,
+
+        [Parameter(ParameterSetName='CloudBolt.Management.Automation.Job')]
+        [Switch]
+        $Job,
+
         [Switch]
         $PassThru
     )
