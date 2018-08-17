@@ -47,3 +47,5 @@ When asked to create a Resource Handler, use "IPMI".
     Write-Error -ErrorRecord $_
     exit 1
 }
+
+& (Join-Path -Path $PSScriptRoot -ChildPath 'build.ps1' -Resolve) -Initialize
