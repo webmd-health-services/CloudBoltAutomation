@@ -1,0 +1,34 @@
+PublishOn:
+ - master
+
+Build:
+# The Version task sets the current build's version number. You should almost always 
+# have one of these.
+- Version:
+    Version:
+        Path: CloudBoltAutomation\CloudBoltAutomation.psd1
+
+- Pester4:
+    OnlyBy: Developer
+    Path: Tests\*.Tests.ps1
+    
+- Exec: .whiskey\bin\7-Zip\7z.exe a $(WHISKEY_OUTPUT_DIRECTORY)\CloudBoltAutomation.zip .\CloudBoltAutomation .\LICENSE.txt .\NOTICE.txt '-xr!*.pdb' '-xr!*.orig
+
+Publish:
+- PublishPowerShellModule:
+    Path: CloudBoltAutomation
+    RepositoryName: PSGallery
+    RepositoryUri: https://www.powershellgallery.com/api/v2/
+    ApiKeyID: powershellgallery.com
+- GitHubRelease:
+    RepositoryName: webmd-health-services/CloudBoltAutomation
+    ApiKeyID: github.com
+    Tag: $(WHISKEY_SEMVER2_NO_BUILD_METADATA)
+    Commitish: $(WHISKEY_SCM_COMMIT_ID)
+    Name: $(WHISKEY_SEMVER2_NO_BUILD_METADATA)
+    Description: $(RELEASE_NOTES)
+    Assets:
+    - Path: .output\CloudBoltAutomation.zip
+      ContentType: application/zip
+      Name: CloudBoltAutomation-$(WHISKEY_SEMVER2_NO_BUILD_METADATA).zip
+    
