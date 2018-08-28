@@ -18,7 +18,7 @@ function Get-CBOrder
     .EXAMPLE
     $order | Get-CBOrder -Session $session
 
-    Demonstrates how to get a specific order by piping an order objec to `Get-CBOrder`.
+    Demonstrates how to get a specific order by piping an order object to `Get-CBOrder`.
 
     .EXAMPLE
     65 | Get-CBOrder -Session $session
@@ -29,7 +29,7 @@ function Get-CBOrder
     param(
         [Parameter(Mandatory)]
         [object]
-        # The session to the CloudBolt instance to connect to and use.
+        # The session/connecton to the CloudBolt instance to use. Use `New-CBSession` to create a session object.
         $Session,
 
         [Parameter(Mandatory,ValueFromPipeline,ValueFromPipelineByPropertyName)]

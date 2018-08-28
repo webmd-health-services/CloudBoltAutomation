@@ -20,5 +20,5 @@ Describe 'New-CBGroup' {
         $newGroup | Should -Not -BeNullOrEmpty
     }
 
-    ThenHasType -ForGroup $group
+    ThenCBObjectHasType -ForGroup $group
 }

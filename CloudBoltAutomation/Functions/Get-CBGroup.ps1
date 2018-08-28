@@ -8,7 +8,7 @@ function Get-CBGroup
     .DESCRIPTION
     The `Get-CBGroup` function gets all groups from a CloudBolt instance. To get a specific group, pass its ID to the `ID` parameter.
 
-    By default, CloudBolt pages the list of groups. This function automatically handles the paging for you and returns all group. You can control how big each page is with the `$PageSize`. `Get-CBGroup` will make as many HTTP requests as there are pages (i.e. it will return all groups).
+    By default, CloudBolt pages the list of groups. This function automatically handles the paging for you and returns all group. You can control how big each page is with the `PageSize` parameter. `Get-CBGroup` will make as many HTTP requests as there are pages (i.e. it will return all groups).
 
     .EXAMPLE
     Get-CBGroup -Session $session
@@ -29,16 +29,17 @@ function Get-CBGroup
     param(
         [Parameter(Mandatory)]
         [object]
-        # The session/connecton to use. Use `New-CBSession` to create a session object.
+        # The session/connecton to the CloudBolt instance to use. Use `New-CBSession` to create a session object.
         $Session,
 
         [Parameter(Mandatory,ParameterSetName='SpecificGroup',ValueFromPipeline,ValueFromPipelineByPropertyName)]
         [int]
+        # The ID of the group to get.
         $ID,
 
         [Parameter(ParameterSetName='AllGroups')]
         [int]
-        # How many results should each request return? The function will do the paging for you and return all groups. The default page size is an obscenely high number.
+        # The page size. CloudBolt pages all lists of objects. The `Get-CBEnvironment` function will make an HTTP request for every page of results so that all environments get returned. The default page size is 10.
         $PageSize
     )
 

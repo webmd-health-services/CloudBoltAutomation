@@ -39,7 +39,7 @@ function Get-CBEnvironment
     param(
         [Parameter(Mandatory)]
         [object]
-        # The session to the CloudBolt instance to connect to and use.
+        # The session/connecton to the CloudBolt instance to use. Use `New-CBSession` to create a session object.
         $Session,
 
         [Parameter(Mandatory,ParameterSetName='ById',ValueFromPipeline,ValueFromPipelineByPropertyName)]

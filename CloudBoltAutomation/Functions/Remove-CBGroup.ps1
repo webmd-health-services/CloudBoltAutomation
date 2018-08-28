@@ -22,11 +22,11 @@ function Remove-CBGroup
 
     Demonstrates that the `Remove-CBGroup` function supports the `-WhatIf` switch.
     #>
-    [CmdletBinding(SupportsShouldProcess=$true)]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory)]
         [object]
-        # The session to the CloudBolt instance to use.
+        # The session/connecton to the CloudBolt instance to use. Use `New-CBSession` to create a session object.
         $Session,
 
         [Parameter(Mandatory,ValueFromPipeline,ValueFromPipelineByPropertyName)]

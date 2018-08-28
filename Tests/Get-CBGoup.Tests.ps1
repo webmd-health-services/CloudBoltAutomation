@@ -12,13 +12,11 @@ function GivenGroups
         $Count
     )
 
-    for( $num = 1; $num -lt $Count ; $num++ )
+    $groupCount = Get-CBGroup -Session $session | Measure-Object | Select-Object -ExpandProperty 'Count'
+    for( $num = $groupCount; $num -lt $Count ; $num++ )
     {
-        if( -not (Get-CBGroup -Session $session -ID $num) )
-        {
-            $name = 'CBAutomation.Get-CBGroup.{0}' -f $num
-            New-CBGroup -Session $session -Name $name -Type 'Organization'
-        }
+        $name = 'CBAutomation.Get-CBGroup.{0}' -f $num
+        New-CBGroup -Session $session -Name $name -Type 'Organization'
     }
 }
 
@@ -33,7 +31,7 @@ Describe 'Get-CBGroup.when getting all groups' {
     
     foreach( $item in $group )
     {
-        ThenHasType -ForGroup $item
+        ThenCBObjectHasType -ForGroup $item
     }
 }
 
@@ -44,7 +42,7 @@ Describe 'Get-CBGroup.when getting a specific group' {
         $group.name | Should -Be 'Unassigned'
         $group | Should -HaveCount 1
     }
-    ThenHasType -ForGroup $group
+    ThenCBObjectHasType -ForGroup $group
 }
 
 Describe 'Get-CBGroup.when paging results' {

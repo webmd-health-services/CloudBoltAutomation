@@ -16,16 +16,16 @@ function Get-CBJob
     param(
         [Parameter(Mandatory)]
         [object]
-        # The session to the CloudBolt instance to connect to and use.
+        # The session/connecton to the CloudBolt instance to use. Use `New-CBSession` to create a session object.
         $Session,
 
         [Parameter(Mandatory,ValueFromPipeline,ValueFromPipelineByPropertyName,ParameterSetName='ById')]
-        [object]
+        [int]
         # The job's ID.
         $ID,
 
         [Parameter(Mandatory,ParameterSetName='ByOrder')]
-        [object]
+        [int]
         # The order ID that created the job.
         $OrderID,
 

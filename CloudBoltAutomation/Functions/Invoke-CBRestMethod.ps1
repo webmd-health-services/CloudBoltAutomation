@@ -1,14 +1,3 @@
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# 
-#     http://www.apache.org/licenses/LICENSE-2.0
-# 
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
 function Invoke-CBRestMethod
 {
@@ -17,50 +6,50 @@ function Invoke-CBRestMethod
     Calls a method in the CloudBolt REST API.
 
     .DESCRIPTION
-    The `Invoke-CBRestMethod` function calls a method on the Bitbucket Server REST API. You pass it a Connection object (returned from `New-BBServerConnection`), the HTTP method to use, the name of API (via the `ApiName` parametr), the name/path of the resource via the `ResourcePath` parameter, and a hashtable/object/psobject via the `InputObject` parameter representing the data to send in the body of the request. The data is converted to JSON and sent in the body of the request.
+    The `Invoke-CBRestMethod` function calls a method in the CloudBolt REST API. Pass a session/connection object to the `Session` parameter (use `New-CBSession` to create a session object), the HTTP method to use to the `Method` parameter, the relative path to the endpoint to the `ResourcePath` parameter (i.e. everything after `api/v2/` in the endpoint's path), and the body of the request (if any) to the `Body` parameter. A result object is returned, which is different for each endpoint.
 
-    A Bitbucket Server URI has the form `https://example.com/rest/API_NAME/API_VERSION/RESOURCE_PATH`. `API_VERSION` is taken from the connection object passed to the `Connection` parameter. The `API_NAME` path should be passed to the `ApiName` paramter. The `RESOURCE_PATH` path should be passed to the `ResourcePath` parameter. The base URI is taken from the `Uri` property of the connection object passed to the `Connection` parameter.
+    Any endpoint that returns a list of objects is paged. Use the `IsPaged` parameter to tell `Invoke-CBRestMethod` that the results are paged and to page through and return all objects. For each page of results, this function will call the API to return that page. You can control how big the page size is with the `PageSize` parameter. The default is `10`. The maximum value is `100`. If you pass a value bigger than `100`, CloudBolt will still only return 100 results per page.
 
     .EXAMPLE
-    $body | Invoke-BBServerRestMethod -Connection $Connection -Method Post -ApiName 'build-status' -ResourcePath ('commits/{0}' -f $commitID)
+    Invoke-CBRestMethod -Session $Session -Method Get -ResourcePath ('orders/{0}/' -f $ID) 
 
-    Demonstrates how to call the /build-status API's `/commits/COMMIT_ID` resource. Body is a hashtable that looks like this:
+    Demonstrates how to use `Invoke-CBRestMethod` to call an endpoint that returns a single object. In this case, a specific order.
 
-        $body = @{
-                    state = 'INPROGRESS';
-                    key = 'MY_BUILD_KEY';
-                    name = 'MY_BUILD_NAME';
-                    url = 'MY_BUILD_URL';
-                    description = 'MY_BUILD_DESCRIPTION';
-                 }
-        
+    .EXAMPLE
+    Invoke-CBRestMethod -Session $Session -Method Get -ResourcePath 'groups/' -IsPaged -PageSize 100
+
+    Demonstrates how to use `Invoke-CBRestMethod` to call a paged/list endpoint. In this case, `Invoke-CBRestMethod` will return all groups in CloudBolt. It will make a request for each page of results so that all groups are returned.
     #>
     [CmdletBinding(DefaultParameterSetName='NonPaged',SupportsShouldProcess)]
     param(
         [Parameter(Mandatory)]
         [object]
-        # The connection to use to invoke the REST method.
+        # The session/connecton to the CloudBolt instance to use. Use `New-CBSession` to create a session object.
         $Session,
 
         [Parameter(Mandatory)]
         [Microsoft.PowerShell.Commands.WebRequestMethod]
+        # The HTTP method to use for the request.
         $Method,
 
         [Parameter(Mandatory)]
         [string]
-        # The path to the resource to use. If the endpoint URI `http://example.com/rest/build-status/1.0/commits`, the ResourcePath is everything after the API version. In this case, the resource path is `commits`.
+        # The relative path to the endpoint to request. This is the part of the URI after `api/v2/`. It usually needs to end with a `/`.
         $ResourcePath,
 
         [Parameter(ParameterSetName='NonPaged')]
         [string]
+        # The body of the request.
         $Body,
 
         [Parameter(Mandatory,ParameterSetName='Paged')]
         [Switch]
+        # Is the API endpoint paged or not? If this switch is `true`, the `Invoke-CBRestMethod` function will treat the results as paged and will make a web request for each page of results and return all objects. Use the `PageSize` function to control how many results to return in each page (i.e. to increase or decrease the number of HTTP requests to make).
         $IsPaged,
 
         [Parameter(ParameterSetName='Paged')]
         [int]
+        # How many results to return in each page. The default is `10`. The maximum value is `100`. If you pass a value greater than `100`, CloudBolt will still only return `100` results per page.
         $PageSize
     )
 

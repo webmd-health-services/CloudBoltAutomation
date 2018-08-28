@@ -7,19 +7,19 @@ function Wait-CBorder
     .DESCRIPTION
     The `Wait-CBOrder` function waits for a CloudBolt order to complete. Pass the session to the target CloudBolt instance to the `Session` parameter (use `New-CBSession` to create a session object). Pass the ID of the order to the `ID` parameter. You can also pipe order objects or IDs to `Wait-CBOrder`.
 
-    By default, will wait for two minutes for the job to complete, checking the status every second. 
+    By default, will wait 100 seconds for the job to complete, checking the status every second. 
     
 
     .EXAMPLE
-    
+    Start-CBOrder -Session $session -GroupID 4398 -BlueprintID 383 | Wait-CBOrder -Session $session
 
-    
+    Demonstrates how to pipe an object from `Start-CBOrder` to `Wait-CBOrder`, which will wait until the order completes or the wait times out.
     #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
         [object]
-        # The session to the CloudBolt instance to connect to and use.
+        # The session/connecton to the CloudBolt instance to use. Use `New-CBSession` to create a session object.
         $Session,
 
         [Parameter(Mandatory,ValueFromPipeline,ValueFromPipelineByPropertyName,ParameterSetName='ById')]
@@ -29,11 +29,11 @@ function Wait-CBorder
 
         [timespan]
         # The total amount of time to wait for the order to complete. The default value is 100 seconds. If the order doesn't complete, the function returns nothing.
-        $Timeout = [timespan]'00:01:40',
+        $Timeout = (New-TimeSpan -Seconds 100),
 
         [timespan]
         # The amount of time to wait between checking the order's status. The default is one second.
-        $RetryInterval = [timespan]'00:00:01'
+        $RetryInterval = (New-TimeSpan -Seconds 1)
     )
 
     process

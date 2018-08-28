@@ -37,11 +37,7 @@ function New-CBSession
 
         [string]
         # The domain to use.
-        $Domain,
-
-        [int]
-        # The page size to use. The default is an obscenely large number.
-        $PageSize = [int]::MaxValue
+        $Domain
     )
 
     Set-StrictMode -Version 'Latest'
