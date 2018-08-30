@@ -7,21 +7,25 @@ function Add-CBTypeName
         [object]
         $InputObject,
 
+        [Parameter(ParameterSetName='CloudBolt.Management.Automation.Environment')]
+        [Switch]
+        $Environment,
+
         [Parameter(ParameterSetName='CloudBolt.Management.Automation.Group')]
         [Switch]
         $Group,
 
-        [Parameter(ParameterSetName='CloudBolt.Management.Automation.Environment')]
+        [Parameter(ParameterSetName='CloudBolt.Management.Automation.Job')]
         [Switch]
-        $Environment,
+        $Job,
 
         [Parameter(ParameterSetName='CloudBolt.Management.Automation.Order')]
         [Switch]
         $Order,
 
-        [Parameter(ParameterSetName='CloudBolt.Management.Automation.Job')]
+        [Parameter(ParameterSetName='CloudBolt.Management.Automation.Resources.Service')]
         [Switch]
-        $Job,
+        $ResourceService,
 
         [Switch]
         $PassThru

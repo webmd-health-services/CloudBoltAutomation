@@ -67,7 +67,8 @@
                             'Formats\CloudBolt.Management.Automation.Environment.ps1xml',
                             'Formats\CloudBolt.Management.Automation.Group.ps1xml',
                             'Formats\CloudBolt.Management.Automation.Job.ps1xml',
-                            'Formats\CloudBolt.Management.Automation.Order.ps1xml'
+                            'Formats\CloudBolt.Management.Automation.Order.ps1xml',
+                            'Formats\CloudBolt.Management.Automation.Resources.Service.ps1xml'
                         )
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
@@ -79,10 +80,12 @@
                             'Get-CBGroup',
                             'Get-CBJob',
                             'Get-CBOrder',
+                            'Get-CBResourceService',
                             'Invoke-CBRestMethod',
                             'New-CBGroup',
                             'New-CBSession',
                             'Remove-CBGroup',
+                            'Remove-CBResourceService',
                             'Start-CBOrder',
                             'Wait-CBOrder'
                         )
@@ -134,6 +137,8 @@
 * Created `Remove-CBGroup` function for removing groups from CloudBolt.
 * Created `Start-CBOrder` function for starting an order in CloudBolt.
 * Created `Wait-CBOrder` function for waiting for a CloudBolt order to complete.
+* Created `Get-CBResourceService' function for getting service resources from CloudBolt.
+* Created `Remove-CBResourceService` function for deleting service resources from CloudBolt.
 '@
 
         } # End of PSData hashtable

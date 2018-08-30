@@ -68,7 +68,12 @@ function Invoke-CBRestMethod
         $queryString = $queryString -join '&'
     }
 
-    $uri = New-Object 'Uri' -ArgumentList $Session.Uri,('{0}?{1}' -f $ResourcePath,$queryString)
+    $relativeUri = $ResourcePath
+    if( $queryString )
+    {
+        $relativeUri = '{0}?{1}' -f $relativeUri,$queryString
+    }
+    $uri = New-Object 'Uri' -ArgumentList $Session.Uri,$relativeUri
     $contentType = 'application/json'
 
     #$DebugPreference = 'Continue'
@@ -83,7 +88,7 @@ function Invoke-CBRestMethod
             $Body | Write-Debug
         }
 
-        if( $PSCmdlet.ShouldProcess($uri,$Method) )
+        if( $Method -eq [Microsoft.PowerShell.Commands.WebRequestMethod]::Get -or $PSCmdlet.ShouldProcess($uri,$Method) )
         {
             if( $PSCmdlet.ParameterSetName -eq 'Paged' )
             {
