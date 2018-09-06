@@ -11,7 +11,7 @@ Build:
     OnlyBy: Developer
     Path: Tests\*.Tests.ps1
     
-- Exec: .whiskey\bin\7-Zip\7z.exe a $(WHISKEY_OUTPUT_DIRECTORY)\CloudBoltAutomation.zip .\CloudBoltAutomation .\LICENSE.txt .\NOTICE.txt '-xr!*.pdb' '-xr!*.orig
+- Exec: .whiskey\bin\7-Zip\7z.exe a $(WHISKEY_OUTPUT_DIRECTORY)\CloudBoltAutomation.zip .\CloudBoltAutomation .\LICENSE .\NOTICE '-xr!*.pdb' '-xr!*.orig
 
 Publish:
 - PublishPowerShellModule:
