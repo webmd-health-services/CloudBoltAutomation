@@ -50,7 +50,7 @@ function Get-CBEnvironment
         [Parameter(ParameterSetName='All')]
         [int]
         # The page size. CloudBolt pages all lists of objects. The `Get-CBEnvironment` function will make an HTTP request for every page of results so that all environments get returned. The default page size is 10.
-        $PageSize
+        $PageSize = $defaultPageSize
     )
 
     process

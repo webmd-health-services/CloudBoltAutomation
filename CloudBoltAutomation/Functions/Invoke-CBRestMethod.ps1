@@ -50,7 +50,7 @@ function Invoke-CBRestMethod
         [Parameter(ParameterSetName='Paged')]
         [int]
         # How many results to return in each page. The default is `10`. The maximum value is `100`. If you pass a value greater than `100`, CloudBolt will still only return `100` results per page.
-        $PageSize
+        $PageSize = $defaultPageSize
     )
 
     Set-StrictMode -Version 'Latest'
