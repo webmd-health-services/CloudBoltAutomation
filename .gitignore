@@ -1,0 +1,4 @@
+.vagrant/**
+.output/**
+.vscode/**
+Modules/**
