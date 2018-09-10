@@ -17,11 +17,6 @@ function Remove-CBResourceService
     Get-CBResourceService -Session $session -ID 65 | Remove-CBResourceService -Session $session    
 
     Demonstrates how you can pipe service resource objects to `Remove-CBResourceService`.
-
-    .EXAMPLE
-    Remove-CBResourceService -Session $session -ID 49 -WhatIf
-
-    Demonstrates that the `Remove-CBResourceService` function supports the `-WhatIf` switch.
     #>
     [CmdletBinding(SupportsShouldProcess=$true)]
     param(

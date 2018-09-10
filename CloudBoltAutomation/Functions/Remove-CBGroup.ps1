@@ -16,11 +16,6 @@ function Remove-CBGroup
     Get-CBGroup -Session $session -ID 65 | Remove-CBGroup -Session $session    
 
     Demonstrates how you can pipe group objects to `Remove-CBGroup`.
-
-    .EXAMPLE
-    Remove-CBGroup -Session $session -ID 49 -WhatIf
-
-    Demonstrates that the `Remove-CBGroup` function supports the `-WhatIf` switch.
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
