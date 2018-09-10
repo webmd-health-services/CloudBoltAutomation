@@ -21,7 +21,7 @@
     GUID = 'dfaabe7f-4187-4ec6-b764-83f09bcb0e00'
 
     # Author of this module
-    Author = ''
+    Author = 'WebMD Health Services'
 
     # Company or vendor of this module
     CompanyName = 'WebMD Health Services'
