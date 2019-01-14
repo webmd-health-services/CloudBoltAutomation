@@ -39,7 +39,7 @@ function Get-CBJob
         Set-StrictMode -Version 'Latest'
         Use-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
 
-        $jobIDInHrefRegex = '\b(\d+)$'
+        $jobIDInHrefRegex = '\b(\d+)/?$'
 
         & {
                 if( $ID )
