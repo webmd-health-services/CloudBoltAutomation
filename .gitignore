@@ -1,4 +1,4 @@
-.vagrant/**
-.output/**
-.vscode/**
-Modules/**
+/.vagrant/**
+/.output/**
+/.vscode/**
+/PSModules/**

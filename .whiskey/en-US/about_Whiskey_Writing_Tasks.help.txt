@@ -67,6 +67,16 @@ LONG DESCRIPTION
 
     In other words, your task isn't allowed to have these properties.
 
+    # Platform
+
+    If your task should only run on certain platforms/operating systems, set the `Platform` property on your task's `TaskAttribute` to the platform(s) it is restricted to. If the task runs on an unsupported platform, the build will fail. By default, tasks can run on all platforms. Supported platforms are `Windows`, `Linux`, and `MacOS`. For example, a task with this task attribute will only run on Windows:
+
+        [Whiskey.Task('TASK_NAME',Platform=[Whiskey.Platform]::Windows)]
+
+    To run on multiple platforms, use PowerShell's `-bor` operator: 
+
+        [Whiskey.Task('TASK_NAME',Platform=[Whiskey.Platform]::Windows -bor [Whiskey.Platform]::Linux)]
+
     # Tools
 
     Whiskey can automatically install some tools for your task. The path to that tool is passed to your task in the `TaskParameter` parameter.
@@ -116,6 +126,7 @@ LONG DESCRIPTION
     * Node
     * Node Modules
     * .NET Core SDK
+    * PowerShell modules
 
     ## Node
 
@@ -143,7 +154,7 @@ LONG DESCRIPTION
 
     would cause Whiskey to install the NSP module and send the path to its directory in the `NspPath` key of the `TaskParameter` hashtable when calling your task. The path will always be to the Node module's directory in the `node_modules` directory.
 
-    Whiskey does not install these Node modules in your project's node_modules directory. It installs them to `.node\node_modules`, your project's dedicated "global" Node environment.
+    Whiskey does not install these Node modules in your project's node_modules directory. It installs them to the "node_modules" directory in your project's dedicated "global" Node environment.
 
     ## .NET Core SDK
 
@@ -166,3 +177,15 @@ LONG DESCRIPTION
     Before installing the .NET Core SDK to the build root, Whiskey will first search for global .NET Core installs containing the desired version. If a global install is found with the correct version, that path is used and the install to the local build root is skipped.
 
     Whiskey will *always* update the `sdk.version` property within the `global.json` file found in the task working directory or the Whiskey build root with the version of the SDK that task is using. If a `global.json` file does not exist in either the working directory or build root, one is created in the build root.
+
+    ## PowerShell Modules
+
+    To install a PowerShell module, add this to your task:
+
+        [Whiskey.RequiresTol('PowerShellModule::Whiskey','WhiskeyPath')]
+
+    The `WhiskeyPath` string is the name of the key where the path to the module root should be saved in the `$TaskParameter` hashtable passed to your task.
+
+    Use the `Import-WhiskeyPowerShellModule` function in your task to import the module. Pass the name (or names) of the module to the `Import-WhiskeyPowerShellModule` function's `Name` parameter.
+
+    Modules are saved to a directory in working directory of the task that requires it. The exact directory is an implementation detail, and is subject to change. Use the path as passed to your task.

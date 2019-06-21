@@ -1,6 +1,8 @@
+
 function Invoke-WhiskeyMSBuild
 {
-    [Whiskey.Task("MSBuild",SupportsClean=$true)]
+    [Whiskey.Task('MSBuild',SupportsClean,Platform='Windows')]
+    [Whiskey.RequiresTool('PowerShellModule::VSSetup','VSSetupPath',Version='2.*',VersionParameterName='VSSetupVersion')]
     [CmdletBinding()]
     param(
         [Whiskey.Context]
@@ -17,6 +19,8 @@ function Invoke-WhiskeyMSBuild
     Set-StrictMode -version 'Latest'
     Use-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
 
+    Import-WhiskeyPowerShellModule -Name 'VSSetup'
+
     #setup
     $nuGetPath = Install-WhiskeyNuGet -DownloadRoot $TaskContext.BuildRoot -Version $TaskParameter['NuGetVersion']
 
@@ -30,6 +34,7 @@ function Invoke-WhiskeyMSBuild
             Path:
             - MySolution.sln
             - MyCsproj.csproj')
+        return
     }
 
     $path = $TaskParameter['Path'] | Resolve-WhiskeyTaskPath -TaskContext $TaskContext -PropertyName 'Path'
@@ -49,6 +54,7 @@ function Invoke-WhiskeyMSBuild
     {
         $msbuildVersionNumbers = $msbuildInfos | Select-Object -ExpandProperty 'Name'
         Stop-WhiskeyTask -TaskContext $TaskContext -Message ('MSBuild {0} is not installed. Installed versions are: {1}' -f $version,($msbuildVersionNumbers -join ', '))
+        return
     }
 
     $msbuildExePath = $msbuildInfo.Path
@@ -58,6 +64,7 @@ function Invoke-WhiskeyMSBuild
         if( -not $msbuildExePath )
         {
             Stop-WhiskeyTask -TaskContext $TaskContext -Message ('A 32-bit version of MSBuild {0} does not exist.' -f $version)
+            return
         }
     }
     Write-WhiskeyVerbose -Context $TaskContext -Message ('{0}' -f $msbuildExePath)
@@ -187,6 +194,7 @@ function Invoke-WhiskeyMSBuild
         if( $LASTEXITCODE -ne 0 )
         {
             Stop-WhiskeyTask -TaskContext $TaskContext -Message ('MSBuild exited with code {0}.' -f $LASTEXITCODE)
+            return
         }
     }
 }
