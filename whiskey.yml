@@ -1,6 +1,5 @@
 PublishOn:
  - master
- - hotfix/powershellgallery-publishing
 
 Build:
 # The Version task sets the current build's version number. You should almost always 
@@ -37,15 +36,15 @@ Publish:
             PSData:
                 ReleaseNotes: RELEASE_NOTES
 
-#- GitHubRelease:
-#    RepositoryName: webmd-health-services/CloudBoltAutomation
-#    ApiKeyID: github.com
-#    Tag: $(WHISKEY_SEMVER2_NO_BUILD_METADATA)
-#    Commitish: $(WHISKEY_SCM_COMMIT_ID)
-#    Name: $(WHISKEY_SEMVER2_NO_BUILD_METADATA)
-#    Description: $(RELEASE_NOTES)
-#    Assets:
-#    - Path: .output\CloudBoltAutomation.zip
-#      ContentType: application/zip
-#      Name: CloudBoltAutomation-$(WHISKEY_SEMVER2_NO_BUILD_METADATA).zip
+- GitHubRelease:
+    RepositoryName: webmd-health-services/CloudBoltAutomation
+    ApiKeyID: github.com
+    Tag: $(WHISKEY_SEMVER2_NO_BUILD_METADATA)
+    Commitish: $(WHISKEY_SCM_COMMIT_ID)
+    Name: $(WHISKEY_SEMVER2_NO_BUILD_METADATA)
+    Description: $(RELEASE_NOTES)
+    Assets:
+    - Path: .output\CloudBoltAutomation.zip
+      ContentType: application/zip
+      Name: CloudBoltAutomation-$(WHISKEY_SEMVER2_NO_BUILD_METADATA).zip
     
