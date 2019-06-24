@@ -17,6 +17,8 @@ function Invoke-WhiskeyNpmRunScript
     Set-StrictMode -Version 'Latest'
     Use-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
 
+    Write-Warning -Message ('The "NpmRunScript" task is obsolete. It will be removed in a future version of Whiskey. Please use the "Npm" task instead.')
+
     $npmScripts = $TaskParameter['Script']
     if (-not $npmScripts)
     {
@@ -29,12 +31,13 @@ function Invoke-WhiskeyNpmRunScript
             - test
 
         '
+        return
     }
 
     foreach ($script in $npmScripts)
     {
         Write-WhiskeyTiming -Message ('Running script ''{0}''.' -f $script)
-        Invoke-WhiskeyNpmCommand -Name 'run-script' -ArgumentList $script -NodePath $TaskParameter['NodePath'] -ForDeveloper:$TaskContext.ByDeveloper -ErrorAction Stop
+        Invoke-WhiskeyNpmCommand -Name 'run-script' -ArgumentList $script -BuildRootPath $TaskContext.BuildRoot -ForDeveloper:$TaskContext.ByDeveloper -ErrorAction Stop
         Write-WhiskeyTiming -Message ('COMPLETE')
     }
 }

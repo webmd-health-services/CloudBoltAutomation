@@ -1,5 +1,6 @@
 PublishOn:
  - master
+ - prerelease
 
 Build:
 # The Version task sets the current build's version number. You should almost always 
@@ -11,15 +12,35 @@ Build:
     OnlyBy: Developer
     Path: Tests\*.Tests.ps1
     
-- Exec: .whiskey\bin\7-Zip\7z.exe a $(WHISKEY_OUTPUT_DIRECTORY)\CloudBoltAutomation.zip .\CloudBoltAutomation .\LICENSE .\NOTICE '-xr!*.pdb' '-xr!*.orig
+- Zip:
+    ArchivePath: $(WHISKEY_OUTPUT_DIRECTORY)\CloudBoltAutomation.zip
+    Path: 
+    - CloudBoltAutomation
+    - LICENSE
+    - NOTICE
+    Exclude:
+    - "*.pdb"
+    - "*.orig"
 
 Publish:
+
 - PublishPowerShellModule:
+    UnlessExists: env:APPVEYOR_PULL_REQUEST_NUMBER
     Path: CloudBoltAutomation
     RepositoryName: PSGallery
     RepositoryUri: https://www.powershellgallery.com/api/v2/
     ApiKeyID: powershellgallery.com
+
+- SetVariableFromPowerShellDataFile:
+    Path: CloudBoltAutomation\CloudBoltAutomation.psd1
+    Variables:
+        PrivateData:
+            PSData:
+                ReleaseNotes: RELEASE_NOTES
+
 - GitHubRelease:
+    UnlessExists: env:APPVEYOR_PULL_REQUEST_NUMBER
+    OnlyOnBranch: master
     RepositoryName: webmd-health-services/CloudBoltAutomation
     ApiKeyID: github.com
     Tag: $(WHISKEY_SEMVER2_NO_BUILD_METADATA)

@@ -12,7 +12,7 @@
     RootModule = 'CloudBoltAutomation.psm1'
 
     # Version number of this module.
-    ModuleVersion = '0.0.0'
+    ModuleVersion = '0.0.1'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -21,7 +21,7 @@
     GUID = 'dfaabe7f-4187-4ec6-b764-83f09bcb0e00'
 
     # Author of this module
-    Author = ''
+    Author = 'WebMD Health Services'
 
     # Company or vendor of this module
     CompanyName = 'WebMD Health Services'
@@ -127,18 +127,7 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = @'
-* Created `Get-CBEnvironment` function for getting environments from CloudBolt.
-* Created `Get-CBGroup` function for getting groups from CloudBolt.
-* Created `Get-CBJob` function for getting jobs from CloudBolt.
-* Created `Get-CBOrder` function for getting orders from CloudBolt.
-* Created `Invoke-CBRestMethod` function for calling CloudBolt API endpoints.
-* Created `New-CBGroup` function for creating groups in CloudBolt.
-* Created `New-CBSession` function for connecting to CloudBolt.
-* Created `Remove-CBGroup` function for removing groups from CloudBolt.
-* Created `Start-CBOrder` function for starting an order in CloudBolt.
-* Created `Wait-CBOrder` function for waiting for a CloudBolt order to complete.
-* Created `Get-CBResourceService' function for getting service resources from CloudBolt.
-* Created `Remove-CBResourceService` function for deleting service resources from CloudBolt.
+* Fixed: `Get-CBJob` fails to get the job for a CloudBolt order with a given `OrderID` on newer versions of CloudBolt.
 '@
 
         } # End of PSData hashtable

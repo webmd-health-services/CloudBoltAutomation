@@ -18,6 +18,8 @@ function Invoke-WhiskeyNodeNspCheck
     Set-StrictMode -Version 'Latest'
     Use-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
 
+    Write-Warning -Message ('The "NodeNspCheck" task is obsolete and will be removed in a future version of Whiskey. Please use the "NpmAudit" task instead. The NSP project died in September 2018 and was replaced with the `npm audit` command.')
+
     $nspPath = Assert-WhiskeyNodeModulePath -Path $TaskParameter['NspPath'] -CommandPath 'bin\nsp' -ErrorAction Stop
 
     $nodePath = Assert-WhiskeyNodePath -Path $TaskParameter['NodePath'] -ErrorAction Stop
@@ -48,11 +50,13 @@ function Invoke-WhiskeyNodeNspCheck
     catch
     {
         Stop-WhiskeyTask -TaskContext $TaskContext -Message ('NSP, the Node Security Platform, did not run successfully as it did not return valid JSON (exit code: {0}):{1}{2}' -f $LASTEXITCODE,[Environment]::NewLine,$output)
+        return
     }
 
     if ($Global:LASTEXITCODE -ne 0)
     {
         $summary = $results | Format-List | Out-String
         Stop-WhiskeyTask -TaskContext $TaskContext -Message ('NSP, the Node Security Platform, found the following security vulnerabilities in your dependencies (exit code: {0}):{1}{2}' -f $LASTEXITCODE,[Environment]::NewLine,$summary)
+        return
     }
 }
